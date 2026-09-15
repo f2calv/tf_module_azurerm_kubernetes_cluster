@@ -1,7 +1,4 @@
----
-title: Terraform Module for Azure Kubernetes Service
-description: Provision an Azure Kubernetes Service cluster with managed identity and RBAC
----
+# Terraform Module for Azure Kubernetes Service
 
 Provisions an [Azure Kubernetes Service](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/kubernetes_cluster) cluster with SystemAssigned managed identity and RBAC enabled. Automatically tracks the latest non-preview Kubernetes version.
 
