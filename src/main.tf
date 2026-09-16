@@ -27,6 +27,7 @@ resource "azurerm_kubernetes_cluster" "this" {
 
   automatic_upgrade_channel = var.k8s_automatic_channel_upgrade
   node_os_upgrade_channel   = var.k8s_node_os_channel_upgrade
+  oidc_issuer_enabled       = false
 
   default_node_pool {
     name                 = var.k8s_node_pool_name
@@ -36,6 +37,12 @@ resource "azurerm_kubernetes_cluster" "this" {
     max_pods             = var.k8s_vm_max_pods
     os_disk_size_gb      = var.k8s_vm_disk_size
     vnet_subnet_id       = var.k8s_vnet_subnet_id
+
+    upgrade_settings {
+      drain_timeout_in_minutes      = 0
+      max_surge                     = "10%"
+      node_soak_duration_in_minutes = 0
+    }
   }
 
   identity {
@@ -62,6 +69,10 @@ resource "azurerm_kubernetes_cluster" "this" {
     day_of_week = var.k8s_maintenance_day_of_week
     start_time  = var.k8s_maintenance_start_time
     utc_offset  = var.k8s_maintenance_utc_offset
+  }
+
+  upgrade_override {
+    force_upgrade_enabled = false
   }
 
   role_based_access_control_enabled = true
