@@ -1,12 +1,29 @@
 # Terraform Module for Azure Kubernetes Service
 
-Provisions an [Azure Kubernetes Service](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/kubernetes_cluster) cluster with SystemAssigned managed identity and RBAC enabled. Automatically tracks the latest non-preview Kubernetes version.
+Provisions an [Azure Kubernetes Service](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/kubernetes_cluster)
+cluster with a system-assigned managed identity and RBAC enabled, using the latest
+non-preview Kubernetes version. The caller owns the resource group, subnet,
+provider configuration, backend, and Terraform state.
+
+## Dependency Graph
+
+```mermaid
+graph LR
+    caller[Calling root module] --> rg[Existing resource group]
+    caller --> subnet[Existing AKS subnet]
+    rg --> rgdata[Resource group data source]
+    rgdata --> versions[Kubernetes versions data source]
+    rgdata --> cluster[Azure Kubernetes Service cluster]
+    versions --> cluster
+    subnet --> cluster
+    cluster --> noderg[AKS-managed node resource group]
+```
 
 ## Usage
 
 ```hcl
 module "k8s" {
-  source                  = "git::https://github.com/f2calv/tf_module_azurerm_kubernetes_cluster.git//src?ref=v0.2.0"
+  source                  = "git::https://github.com/f2calv/tf_module_azurerm_kubernetes_cluster.git//src?ref=0.2.1"
   k8s_resource_group_name = azurerm_resource_group.rg.name
   k8s_cluster_name        = "mycluster"
   k8s_cluster_dns_prefix  = "mycluster-dns"
@@ -19,39 +36,77 @@ module "k8s" {
 }
 ```
 
-## Variables
+The resource group and subnet in this example are created by the calling root
+module and are not managed by this module.
 
-| Name | Type | Default | Description |
-| --- | --- | --- | --- |
-| `k8s_resource_group_name` | `string` | Required | Name of the parent resource group |
-| `k8s_cluster_name` | `string` | Required | Name of the AKS cluster |
-| `k8s_cluster_dns_prefix` | `string` | Required | DNS prefix for the hosted Kubernetes API server FQDN |
-| `k8s_node_resource_group` | `string` | Required | Resource group for node pool internal objects |
-| `k8s_node_pool_name` | `string` | Required | The name of the default node pool |
-| `k8s_node_count` | `number` | Required | The number of VM nodes in the default pool |
-| `k8s_vm_size` | `string` | Required | The size of the VM nodes |
-| `k8s_vm_disk_size` | `number` | `30` | Disk size (GB) per node |
-| `k8s_vm_max_pods` | `number` | `100` | Max pods per node |
-| `k8s_vnet_subnet_id` | `string` | Required | Resource ID of the subnet used by the default AKS node pool |
-| `tags` | `map(string)` | `{}` | Tags for all resources |
+<!-- markdownlint-disable MD060 -->
+<!-- BEGIN_TF_DOCS -->
+## Requirements
+
+| Name | Version |
+| ---- | ------- |
+| terraform | >= 1.1 |
+| azurerm | >= 5.0, < 6.0 |
+
+## Providers
+
+| Name | Version |
+| ---- | ------- |
+| azurerm | >= 5.0, < 6.0 |
+
+## Resources
+
+| Name | Type |
+| ---- | ---- |
+| [azurerm_kubernetes_cluster.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/kubernetes_cluster) | resource |
+
+## Inputs
+
+| Name | Description | Type | Default | Required |
+| ---- | ----------- | ---- | ------- | :------: |
+| k8s\_cluster\_dns\_prefix | Optional DNS prefix to use with hosted Kubernetes API server FQDN. | `string` | n/a | yes |
+| k8s\_cluster\_name | Name of the AKS cluster. | `string` | n/a | yes |
+| k8s\_node\_count | The number of VM nodes in the default AKS node pool. | `number` | n/a | yes |
+| k8s\_node\_pool\_name | The name of the default AKS node pool. | `string` | n/a | yes |
+| k8s\_node\_resource\_group | Resource group for the internal objects of the node pool. | `string` | n/a | yes |
+| k8s\_resource\_group\_name | Name of the parent resource group. | `string` | n/a | yes |
+| k8s\_vm\_size | The size of the VM nodes in the default AKS node pool. | `string` | n/a | yes |
+| k8s\_vnet\_subnet\_id | Resource ID of the subnet used by the default AKS node pool. | `string` | n/a | yes |
+| k8s\_vm\_disk\_size | Disk size (in GB) to provision for each of the agent pool nodes. This value ranges from 30 to 1023. Specifying 0 applies the default disk size for that agentVMSize. | `number` | `30` | no |
+| k8s\_vm\_max\_pods | Max pods per node. | `number` | `100` | no |
+| tags | Any tags that should be present on the resources. | `map(string)` | `{}` | no |
 
 ## Outputs
 
-| Name | Sensitive | Description |
-| --- | --- | --- |
-| `id` | No | The ID of the AKS cluster |
-| `name` | No | The name of the AKS cluster |
-| `location` | No | The location of the AKS cluster |
-| `fqdn` | No | The FQDN of the AKS cluster |
-| `mi_principal_id` | No | The principal ID of the cluster managed identity |
-| `mi_tenant_id` | No | The tenant ID of the cluster managed identity |
-| `kubelet_client_id` | No | The client ID of the kubelet managed identity |
-| `kubelet_object_id` | No | The object ID of the kubelet managed identity |
-| `kubelet_user_assigned_identity_id` | No | The user-assigned identity ID of the kubelet |
-| `kube_config_host` | Yes | The Kubernetes cluster API server URL |
-| `kube_config_username` | Yes | The cluster admin username |
-| `kube_config_password` | Yes | The cluster admin password |
-| `kube_config_client_certificate` | Yes | The base64-encoded client certificate |
-| `kube_config_client_key` | Yes | The base64-encoded client key |
-| `kube_config_cluster_ca_certificate` | Yes | The base64-encoded cluster CA certificate |
-| `kube_config` | Yes | The raw kubeconfig for the AKS cluster |
+| Name | Description |
+| ---- | ----------- |
+| fqdn | The FQDN of the AKS cluster. |
+| id | The ID of the AKS cluster. |
+| kube\_config | The raw kubeconfig for the AKS cluster. |
+| kube\_config\_client\_certificate | The base64-encoded client certificate for cluster authentication. |
+| kube\_config\_client\_key | The base64-encoded client key for cluster authentication. |
+| kube\_config\_cluster\_ca\_certificate | The base64-encoded cluster CA certificate. |
+| kube\_config\_host | The Kubernetes cluster API server URL. |
+| kube\_config\_password | The Kubernetes cluster admin password. |
+| kube\_config\_username | The Kubernetes cluster admin username. |
+| kubelet\_client\_id | The client ID of the kubelet managed identity. |
+| kubelet\_object\_id | The object ID of the kubelet managed identity. |
+| kubelet\_user\_assigned\_identity\_id | The user-assigned identity ID of the kubelet. |
+| location | The location of the AKS cluster. |
+| mi\_principal\_id | The principal ID of the cluster managed identity. |
+| mi\_tenant\_id | The tenant ID of the cluster managed identity. |
+| name | The name of the AKS cluster. |
+<!-- END_TF_DOCS -->
+<!-- markdownlint-enable MD060 -->
+
+## Development
+
+Regenerate the Terraform reference after changing resources, variables,
+outputs, or version constraints:
+
+```bash
+terraform-docs --config .terraform-docs.yml src
+```
+
+The pre-commit configuration runs the same command in CI and fails when
+generated documentation is not committed.
