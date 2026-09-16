@@ -19,6 +19,17 @@ This repository publishes a single reusable module under `src/`, consumed over a
 - **Never pin an exact version here.** A child module pinning `= 4.81.0` cannot be composed with a caller or a sibling module that needs anything else. Exact pins and the dependency lock file belong to the root module.
 - **Do not declare `provider` blocks.** Providers are inherited from the caller, which may pass a specific alias via `providers = { ... }`.
 
+## Module Versioning
+
+- Before adding a `+semver:` directive, inspect every commit between the merge base with `origin/main` and `HEAD`. A branch must contain exactly one directive; place it in the commit that introduces the versioned behavior and do not repeat it in documentation, formatting or release-tag synchronization commits.
+- Use `+semver:feature` for breaking module changes, including removed or renamed inputs, outputs and resource addresses. Use `+semver:patch` for compatible changes.
+- After the branch is complete, run GitVersion with the repository's `GitVersion.yml` and verify the final numeric major, minor and patch result before creating a pull request.
+- Publish reusable module releases as immutable plain `X.Y.Z` tags. Do not use a `v` prefix, moving aliases or CI/pre-release suffixes for main releases.
+- Configure reusable release-versioning workflow calls with `tag-prefix: ''` and `move-major-tag: false`.
+- Keep the module source example in `README.md` pinned to the immutable plain `X.Y.Z` tag expected from the current change, not `main` or the previous release.
+- Before a pull request is merged, derive the expected final tag from the release workflow's numeric major, minor and patch outputs, excluding any feature-branch pre-release suffix, and update the README in the same change.
+- Treat a mismatch between the README source ref and the expected final release tag as a CI failure.
+
 ## File Conventions
 
 | File | Purpose |
@@ -80,12 +91,6 @@ Adding a required variable, renaming a resource, or removing a resource from a m
 - Document any state migration command consumers must run before applying the new major release.
 - Tag a release and require callers to pin to it. A caller tracking a branch ref inherits breaking changes silently on their next `init`.
 - Record the change in the commit message with a `BREAKING CHANGE:` footer.
-
-## Release References
-
-- Keep the module source example in `README.md` pinned to the immutable tag expected from the current change, not `main` or the previous release.
-- Before a pull request is merged, derive the expected final tag from the release workflow's numeric major, minor and patch outputs, excluding any feature-branch pre-release suffix, and update the README in the same change.
-- Treat a mismatch between the README source ref and the expected final release tag as a CI failure.
 
 ## Dead Code
 
