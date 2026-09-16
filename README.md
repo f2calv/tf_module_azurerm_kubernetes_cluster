@@ -32,6 +32,12 @@ module "k8s" {
   k8s_node_count          = 1
   k8s_vm_size             = "Standard_D2ps_v5"
   k8s_vnet_subnet_id      = azurerm_subnet.aks.id
+  k8s_automatic_channel_upgrade   = "patch"
+  k8s_node_os_channel_upgrade     = "NodeImage"
+  k8s_maintenance_day_of_week     = "Sunday"
+  k8s_maintenance_start_time      = "01:00"
+  k8s_maintenance_duration_hours  = 4
+  k8s_maintenance_utc_offset      = "+01:00"
   tags                    = { environment = "dev" }
 }
 ```
@@ -64,9 +70,15 @@ module and are not managed by this module.
 
 | Name | Description | Type | Default | Required |
 | ---- | ----------- | ---- | ------- | :------: |
+| k8s\_automatic\_channel\_upgrade | Automatic Kubernetes version upgrade channel. | `string` | n/a | yes |
 | k8s\_cluster\_dns\_prefix | Optional DNS prefix to use with hosted Kubernetes API server FQDN. | `string` | n/a | yes |
 | k8s\_cluster\_name | Name of the AKS cluster. | `string` | n/a | yes |
+| k8s\_maintenance\_day\_of\_week | Day of the week for automatic Kubernetes and node OS maintenance. | `string` | n/a | yes |
+| k8s\_maintenance\_duration\_hours | Duration in hours for automatic Kubernetes and node OS maintenance. | `number` | n/a | yes |
+| k8s\_maintenance\_start\_time | Start time for automatic Kubernetes and node OS maintenance. | `string` | n/a | yes |
+| k8s\_maintenance\_utc\_offset | UTC offset for the automatic Kubernetes and node OS maintenance schedule. | `string` | n/a | yes |
 | k8s\_node\_count | The number of VM nodes in the default AKS node pool. | `number` | n/a | yes |
+| k8s\_node\_os\_channel\_upgrade | Automatic node OS upgrade channel. | `string` | n/a | yes |
 | k8s\_node\_pool\_name | The name of the default AKS node pool. | `string` | n/a | yes |
 | k8s\_node\_resource\_group | Resource group for the internal objects of the node pool. | `string` | n/a | yes |
 | k8s\_resource\_group\_name | Name of the parent resource group. | `string` | n/a | yes |
