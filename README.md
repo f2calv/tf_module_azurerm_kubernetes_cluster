@@ -23,7 +23,7 @@ graph LR
 
 ```hcl
 module "k8s" {
-  source                  = "git::https://github.com/f2calv/tf_module_azurerm_kubernetes_cluster.git//src?ref=0.2.2"
+  source                  = "git::https://github.com/f2calv/tf_module_azurerm_kubernetes_cluster.git//src?ref=0.3.0"
   k8s_resource_group_name = azurerm_resource_group.rg.name
   k8s_cluster_name        = "mycluster"
   k8s_cluster_dns_prefix  = "mycluster-dns"
