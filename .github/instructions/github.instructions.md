@@ -5,6 +5,11 @@ applyTo: '**'
 
 # GitHub
 
+## Branch Naming
+
+- Name feature branches `<github_username>/yyyy-MM-concise-name`, for example `f2calv/2026-09-tf-docs`.
+- Use the branch creation year and month followed by concise, lowercase kebab-case wording.
+
 ## Forward-Only Maintenance
 
 - Maintain only current supported behavior. Remove deprecated, retired, legacy and no-op code instead of preserving compatibility aliases or shims.
@@ -21,8 +26,11 @@ applyTo: '**'
 
 ## Release References
 
-- Keep the module source example in `README.md` pinned to the immutable tag that GitVersion predicts for the final branch.
-- Exclude feature-branch prerelease labels from the README tag.
+- Use plain `X.Y.Z` release tags for reusable Terraform modules. Reserve `v`-prefixed tags for GitHub Actions.
+- Main-branch release tags must not contain CI or pre-release suffixes.
+- Configure reusable release-versioning workflow calls with `tag-prefix: ''` and `move-major-tag: false`.
+- Keep the module source example in `README.md` pinned to the immutable plain `X.Y.Z` tag that GitVersion predicts for the final branch.
+- Exclude feature-branch pre-release labels from the README tag.
 - Recalculate the expected tag after the final commit. Do not assume that an earlier calculation remains valid.
 
 ## Continuous Integration

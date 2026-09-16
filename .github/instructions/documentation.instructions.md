@@ -22,6 +22,14 @@ applyTo: '**/*.md'
 - Use descriptive link text and meaningful alt text for every image.
 - Keep headings unique within each file so generated anchors resolve predictably.
 
+## Terraform Reference
+
+- Generate the root `README.md` Terraform reference with `terraform-docs`; do not maintain it by hand.
+- Include the generated Requirements, Providers, Resources, Inputs and Outputs sections.
+- Regenerate the reference after every change to Terraform resources, variables, outputs, provider requirements or Terraform version constraints.
+- Commit the regenerated README output in the same change as the Terraform interface change.
+- Enforce generated-documentation drift in both pre-commit and CI so stale output fails validation.
+
 ## Mermaid Diagrams
 
 Use Mermaid diagrams in `README.md` files to visualize complex relationships and flows. Choose the appropriate diagram type:
