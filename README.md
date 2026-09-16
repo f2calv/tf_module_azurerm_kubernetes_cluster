@@ -83,9 +83,9 @@ module and are not managed by this module.
 | k8s\_node\_resource\_group | Resource group for the internal objects of the node pool. | `string` | n/a | yes |
 | k8s\_resource\_group\_name | Name of the parent resource group. | `string` | n/a | yes |
 | k8s\_vm\_size | The size of the VM nodes in the default AKS node pool. | `string` | n/a | yes |
-| k8s\_vnet\_subnet\_id | Resource ID of the subnet used by the default AKS node pool. | `string` | n/a | yes |
 | k8s\_vm\_disk\_size | Disk size (in GB) to provision for each of the agent pool nodes. This value ranges from 30 to 1023. Specifying 0 applies the default disk size for that agentVMSize. | `number` | `30` | no |
 | k8s\_vm\_max\_pods | Max pods per node. | `number` | `100` | no |
+| k8s\_vnet\_subnet\_id | Resource ID of the subnet used by the default AKS node pool. | `string` | `null` | no |
 | tags | Any tags that should be present on the resources. | `map(string)` | `{}` | no |
 
 ## Outputs

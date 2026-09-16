@@ -54,6 +54,7 @@ variable "k8s_vm_max_pods" {
 variable "k8s_vnet_subnet_id" {
   type        = string
   description = "Resource ID of the subnet used by the default AKS node pool."
+  default     = null
 }
 
 variable "k8s_automatic_channel_upgrade" {
