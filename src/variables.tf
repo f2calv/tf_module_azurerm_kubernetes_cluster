@@ -54,4 +54,35 @@ variable "k8s_vm_max_pods" {
 variable "k8s_vnet_subnet_id" {
   type        = string
   description = "Resource ID of the subnet used by the default AKS node pool."
+  default     = null
+}
+
+variable "k8s_automatic_channel_upgrade" {
+  type        = string
+  description = "Automatic Kubernetes version upgrade channel."
+}
+
+variable "k8s_node_os_channel_upgrade" {
+  type        = string
+  description = "Automatic node OS upgrade channel."
+}
+
+variable "k8s_maintenance_day_of_week" {
+  type        = string
+  description = "Day of the week for automatic Kubernetes and node OS maintenance."
+}
+
+variable "k8s_maintenance_start_time" {
+  type        = string
+  description = "Start time for automatic Kubernetes and node OS maintenance."
+}
+
+variable "k8s_maintenance_duration_hours" {
+  type        = number
+  description = "Duration in hours for automatic Kubernetes and node OS maintenance."
+}
+
+variable "k8s_maintenance_utc_offset" {
+  type        = string
+  description = "UTC offset for the automatic Kubernetes and node OS maintenance schedule."
 }
