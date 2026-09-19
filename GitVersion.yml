@@ -1,4 +1,5 @@
 mode: ContinuousDeployment
+major-version-bump-message: '(?i)(\+semver:\s?(breaking|major)|^[a-z]+(?:\([^)]+\))?!:|BREAKING CHANGE:)'
 branches:
   main:
     regex: ^main$
