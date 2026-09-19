@@ -1,9 +1,5 @@
-data "azurerm_resource_group" "k8s_rg" {
-  name = var.k8s_resource_group_name
-}
-
 data "azurerm_kubernetes_service_versions" "current" {
-  location        = data.azurerm_resource_group.k8s_rg.location
+  location        = var.location
   include_preview = false
 }
 
@@ -17,7 +13,7 @@ resource "azurerm_kubernetes_cluster" "this" {
     ]
   }
 
-  location            = data.azurerm_resource_group.k8s_rg.location
+  location            = var.location
   resource_group_name = var.k8s_resource_group_name
   name                = var.k8s_cluster_name
   kubernetes_version  = data.azurerm_kubernetes_service_versions.current.latest_version
