@@ -3,6 +3,11 @@ variable "k8s_resource_group_name" {
   description = "Name of the parent resource group."
 }
 
+variable "location" {
+  type        = string
+  description = "Azure region of the parent resource group and AKS cluster."
+}
+
 variable "tags" {
   type        = map(string)
   description = "Any tags that should be present on the resources."
