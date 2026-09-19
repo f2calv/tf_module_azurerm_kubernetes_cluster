@@ -50,26 +50,26 @@ module and are not managed by this module.
 ## Requirements
 
 | Name | Version |
-|------|---------|
+| ---- | ------- |
 | terraform | >= 1.1 |
 | azurerm | >= 5.0, < 6.0 |
 
 ## Providers
 
 | Name | Version |
-|------|---------|
+| ---- | ------- |
 | azurerm | >= 5.0, < 6.0 |
 
 ## Resources
 
 | Name | Type |
-|------|------|
+| ---- | ---- |
 | [azurerm_kubernetes_cluster.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/kubernetes_cluster) | resource |
 
 ## Inputs
 
 | Name | Description | Type | Default | Required |
-|------|-------------|------|---------|:--------:|
+| ---- | ----------- | ---- | ------- | :------: |
 | k8s\_automatic\_channel\_upgrade | Automatic Kubernetes version upgrade channel. | `string` | n/a | yes |
 | k8s\_cluster\_dns\_prefix | Optional DNS prefix to use with hosted Kubernetes API server FQDN. | `string` | n/a | yes |
 | k8s\_cluster\_name | Name of the AKS cluster. | `string` | n/a | yes |
@@ -92,7 +92,7 @@ module and are not managed by this module.
 ## Outputs
 
 | Name | Description |
-|------|-------------|
+| ---- | ----------- |
 | fqdn | The FQDN of the AKS cluster. |
 | id | The ID of the AKS cluster. |
 | kube\_config | The raw kubeconfig for the AKS cluster. |
